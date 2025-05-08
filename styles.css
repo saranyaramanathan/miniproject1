@@ -40,7 +40,7 @@ body {
 
 .front {
   z-index: 2;
-  background: #cbc7c0 url('../miniproject1/images/card.jpg') no-repeat center center / contain;
+  background: #cbc7c0 url('images/card.png') no-repeat center center / contain;
 }
 
 .back {
