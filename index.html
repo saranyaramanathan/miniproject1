@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Memory Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    
+    <script>
+       
+      
+const imageArray = [
+{
+    'name': 'rainbow',
+    'img': 'images/img1.jpg',
+  },
+  {
+    'name': 'river',
+    'img': 'images/img2.jpg',
+  },
+  {
+    'name': 'leaf',
+    'img': 'images/img3.jpg',
+  },
+  {
+    'name': 'bird',
+    'img': 'images/img4.jpg',
+  },
+  {
+    'name': 'island',
+    'img': 'images/img5.jpg',
+  },
+  {
+    'name': 'rainbow',
+    'img': 'images/img1.jpg',
+  },
+  {
+    'name': 'river',
+    'img': 'images/img2.jpg',
+  },
+  {
+    'name': 'leaf',
+    'img': 'images/img3.jpg',
+  },
+  {
+    'name': 'bird',
+    'img': 'images/img4.jpg',
+  },
+  {
+    'name': 'island',
+    'img': 'images/img5.jpg',
+  },
+   {
+    'name': 'river',
+    'img': 'images/img2.jpg',
+  },
+  {
+    'name': 'leaf',
+    'img': 'images/img3.jpg',
+  },
+  ]
+
+  const gameGrid = imageArray
+  .concat(imageArray)
+  .sort(() => 0.5 - Math.random());
+
+var firstGuess = '';
+var secondGuess = '';
+var count = 0;
+var previousImage = null;
+var delay = 1000;
+
+    var screen = document.createElement("div");
+    screen.style.width = "100%";
+    screen.style.height = "100vh";
+    screen.style.display = "flex";
+    screen.style.flexDirection="column";
+    screen.style.justifyContent = "center";
+    screen.style.alignItems = "center";
+    //title
+    var title = document.createElement('h1');
+    title.setAttribute('class', 'gameTitle');
+    title.textContent="Memory Game";   
+    screen.appendChild(title);
+    //reset button
+    var reset = document.createElement('button');
+    reset.setAttribute('class', 'Btn-reset');
+    reset.textContent="RESET";   
+    screen.appendChild(reset);
+   
+    //play area
+    var grid = document.createElement('section');
+    grid.setAttribute('class', 'grid');
+    grid.setAttribute('id','playArea');
+    screen.appendChild(grid);
+
+      
+   
+    //load images
+    gameGrid.forEach(item => {
+        const { name, img } = item;
+
+        const card = document.createElement('div');
+        card.classList.add('card');
+        card.dataset.name = name;
+
+        const front = document.createElement('div');
+        front.classList.add('front');
+
+        const back = document.createElement('div');
+        back.classList.add('back');
+        back.style.backgroundImage = `url(${img})`;
+
+        grid.appendChild(card);
+        card.appendChild(front);
+        card.appendChild(back);
+    });
+    document.body.appendChild(screen);
+   var matchedArray =[];
+    const match = () => {
+        const selected = document.querySelectorAll('.selected');
+        selected.forEach(card => {
+            card.classList.add('match');
+        });
+        matchedArray.push(selected.length)
+        console.log(matchedArray.length);
+        if(matchedArray.length == 12){
+            alert(`Congratulations!!! You won the game.`)
+            setTimeout(()=>{
+              
+                window.location.reload();
+            }, 300)
+          
+        } 
+    };
+
+    const resetGuesses = () => {
+        firstGuess = '';
+        secondGuess = '';
+        count = 0;
+        previousImage = null;
+
+        var selected = document.querySelectorAll('.selected');
+        selected.forEach(card => {
+            card.classList.remove('selected');
+        });
+    };
+    reset.onclick=function(){
+        resetGuesses();
+        document.getElementById("playArea").innerHTML = "";
+        window.location.reload();
+        gameGrid.forEach(item => {
+        const { name, img } = item;
+
+        const card = document.createElement('div');
+        card.classList.add('card');
+        card.dataset.name = name;
+
+        const front = document.createElement('div');
+        front.classList.add('front');
+
+        const back = document.createElement('div');
+        back.classList.add('back');
+        back.style.backgroundImage = `url(${img})`;
+
+        grid.appendChild(card);
+        card.appendChild(front);
+        card.appendChild(back);
+    });
+        console.log("reset done")
+    }
+    grid.addEventListener('click', event => {
+
+        const clicked = event.target;
+
+        if (
+            clicked.nodeName === 'SECTION' ||
+            clicked === previousImage ||
+            clicked.parentNode.classList.contains('selected') ||
+            clicked.parentNode.classList.contains('match')
+        ) {
+            return;
+        }
+
+        if (count < 2) {
+            count++;
+            if (count === 1) {
+                firstGuess = clicked.parentNode.dataset.name;
+                console.log(firstGuess);
+                clicked.parentNode.classList.add('selected');
+            } else {
+                secondGuess = clicked.parentNode.dataset.name;
+                console.log(secondGuess);
+                clicked.parentNode.classList.add('selected');
+            }
+
+            if (firstGuess && secondGuess) {
+                if (firstGuess === secondGuess) {
+                    setTimeout(match, delay);
+                   
+                }
+                setTimeout(resetGuesses, delay);
+
+            }
+            previousImage = clicked;
+        }
+       
+        
+        
+    });
+   
+
+    </script>
+</body>
+
+</html>
